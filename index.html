@@ -297,7 +297,7 @@ function spawnEnemy() {
   const edge=Math.floor(Math.random()*4); let x,y;
   if(edge===0){x=Math.random()*W;y=-70;} else if(edge===1){x=W+70;y=Math.random()*H;}
   else if(edge===2){x=Math.random()*W;y=H+70;} else{x=-70;y=Math.random()*H;}
-  enemies.push({x,y,r:22,vx:0,vy:0,speed:0.55+Math.random()*0.3+level*0.04,angle:0,hp:3,flashTimer:0});
+  enemies.push({x,y,r:22,vx:0,vy:0,speed:0.83+Math.random()*0.45+level*0.06,angle:0,hp:3,flashTimer:0});
 }
 
 function spawnBoss() {
@@ -348,11 +348,21 @@ function drawBoss(b) {
     ctx.restore();
   }
   // Boss projectiles — larger, pulsing, unmistakable
+  const projColors={
+    '#ffee44':'255,238,68',
+    '#ff7700':'255,119,0',
+    '#ff1e3c':'255,30,60',
+    '#cc44ff':'204,68,255'
+  };
+  const projRgb = projColors[col] || '255,255,255';
   for(const p of b.projectiles){
     ctx.save(); ctx.translate(p.x,p.y);
     const pulsR=10+Math.sin(frameCount*0.25)*2;
     const pg=ctx.createRadialGradient(0,0,0,0,0,pulsR*1.5);
-    pg.addColorStop(0,'#fff'); pg.addColorStop(0.3,col); pg.addColorStop(0.7,col.replace('#','rgba(').replace(/(.{2})(.{2})(.{2})/,(_,r,g,bh)=>`${parseInt(r,16)},${parseInt(g,16)},${parseInt(bh,16)},0.5)`)); pg.addColorStop(1,'rgba(0,0,0,0)');
+    pg.addColorStop(0,'#fff');
+    pg.addColorStop(0.3,col);
+    pg.addColorStop(0.7,`rgba(${projRgb},0.5)`);
+    pg.addColorStop(1,'rgba(0,0,0,0)');
     ctx.beginPath(); ctx.arc(0,0,pulsR*1.5,0,Math.PI*2); ctx.fillStyle=pg; ctx.fill();
     ctx.beginPath(); ctx.arc(0,0,pulsR*0.45,0,Math.PI*2); ctx.fillStyle='#fff'; ctx.shadowColor=col; ctx.shadowBlur=18; ctx.fill();
     ctx.restore();
@@ -791,7 +801,7 @@ function update() {
   // Spawning
   if(!bossActive && Math.random()<1/asteroidSpawnRate) spawnAsteroid();
   if(frameCount%Math.max(280,480-level*20)===0) spawnPowerup();
-  const enemyRate=Math.max(600,1800-level*120);
+  const enemyRate=Math.max(300,900-level*60);
   if(!bossActive && frameCount>480 && frameCount%enemyRate<2) spawnEnemy();
 
   // Level up
