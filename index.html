@@ -85,9 +85,10 @@ var tripleShot = false, tripleShotTimer = 0;
 var boss = null, bossActive = false, bossShake = 0, bossAnnounceTimer = 0;
 var inventory = [];
 var shopTab = 'items';
+var rings = []; // visual flash rings: {x,y,r,maxR,life,decay,col,shrink}
 var stick = { active:false, id:null, baseX:0, baseY:0, dx:0, dy:0 };
 var STICK_R = 55, STICK_DEAD = 8;
-var AIM_CONE = Math.PI / 4;
+var AIM_CONE = Math.PI / 6;
 canvas.addEventListener('touchstart', function(e) {
 e.preventDefault();
 if (state !== 'playing') return;
@@ -297,6 +298,13 @@ if (level >= 9) return Math.random() < 0.4 ? 'pincer' : 'vshape';
 if (level >= 6) return Math.random() < 0.6 ? 'vshape' : 'triangle';
 if (level >= 3) return 'triangle';
 return 'solo';
+}
+function spawnRing(x, y, startR, endR, col, frames) {
+// shrink=true: starts big shrinks to 0 (respawn beacon)
+// shrink=false: starts small expands outward (nuke wave)
+var shrink = startR > endR;
+rings.push({ x:x, y:y, r:startR, startR:startR, endR:endR,
+life:1, decay:1/frames, col:col, shrink:shrink });
 }
 function spawnFormation() {
 if (enemies.length >= MAX_ENEMIES) return;
@@ -740,6 +748,22 @@ ctx.textAlign = 'left'; ctx.textBaseline = 'top';
 ctx.fillText('TAP TO USE', startX, startY+slotSize+3);
 ctx.restore();
 }
+function drawRings() {
+var i, rng;
+for (i = 0; i < rings.length; i++) {
+rng = rings[i];
+ctx.save();
+ctx.globalAlpha = rng.life * 0.7;
+ctx.strokeStyle = rng.col;
+ctx.shadowColor = rng.col;
+ctx.shadowBlur = 18;
+ctx.lineWidth = 3;
+ctx.beginPath();
+ctx.arc(rng.x, rng.y, Math.max(0, rng.r), 0, Math.PI * 2);
+ctx.stroke();
+ctx.restore();
+}
+}
 function drawStick() {
 if (!stick.active) return;
 ctx.save();
@@ -786,6 +810,7 @@ if (item.id === 'shield') { player.invincible = 300; }
 else if (item.id === 'rapid') { rapidFire = true; rapidTimer = 400; }
 else if (item.id === 'triple') { tripleShot = true; tripleShotTimer = 500; }
 else if (item.id === 'nuke') {
+spawnRing(player.x, player.y, 0, Math.max(W, H), '#ff7700', 45);
 for (var i = 0; i < asteroids.length; i++) explode(asteroids[i].x, asteroids[i].y, '#ff7700', 10, 3);
 for (var j = 0; j < enemies.length; j++) explode(enemies[j].x, enemies[j].y, '#ff1e3c', 14, 4);
 asteroids = []; enemies = [];
@@ -939,7 +964,7 @@ asteroidSpawnRate = 90; asteroidSpeedMult = 1; asteroidHpBonus = 0;
 upgradesBought = 0;
 upgrades.maxLives = 0; upgrades.orbLevel = 0;
 rapidFire = false; rapidTimer = 0; tripleShot = false; tripleShotTimer = 0;
-bullets = []; asteroids = []; particles = []; powerups = []; enemies = []; inventory = [];
+bullets = []; asteroids = []; particles = []; powerups = []; enemies = []; inventory = []; rings = [];
 boss = null; bossActive = false; bossShake = 0; bossAnnounceTimer = 0;
 player.x = W/2; player.y = H/2; player.vx = 0; player.vy = 0;
 player.trail = []; player.invincible = 120; player.shootCd = 0; player.sideCd = 0;
@@ -973,6 +998,8 @@ lives--; combo = 0; updateHUD();
 if (lives <= 0) { gameOver(); return; }
 player.invincible = 180;
 respawnPlayer(dx, dy);
+// Shrinking beacon at spawn point so player can find the ship
+spawnRing(player.x, player.y, 120, 0, '#00f3ff', 90);
 }
 function gameOver() {
 state = 'dead';
@@ -1262,6 +1289,13 @@ if (par.scoreText) { par.y += par.vy; }
 else { par.x+=par.vx; par.y+=par.vy; par.vx*=0.95; par.vy*=0.95; }
 if (par.life <= 0) particles.splice(i,1);
 }
+var rng;
+for (i = rings.length-1; i >= 0; i--) {
+rng = rings[i]; rng.life -= rng.decay;
+rng.r = rng.shrink ? rng.endR + (rng.startR - rng.endR) * rng.life
+: rng.startR + (rng.endR - rng.startR) * (1 - rng.life);
+if (rng.life <= 0) rings.splice(i,1);
+}
 if (comboTimer > 0) {
 comboTimer--;
 var cel = document.getElementById('combo');
@@ -1290,6 +1324,7 @@ if (boss) drawBoss(boss);
 for (i=0;i<bullets.length;i++) drawBullet(bullets[i]);
 for (i=0;i<powerups.length;i++) drawPowerup(powerups[i]);
 drawParticles();
+drawRings();
 drawPlayer();
 if (bossShake > 0) ctx.restore();
 if (boss) drawBossHud(boss);
