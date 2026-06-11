@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>NEON VOID</title>
-<style>*{margin:0;padding:0;box-sizing:border-box}body{background:#000;overflow:hidden;touch-action:none;font-family:'Courier New',Courier,monospace;user-select:none;-webkit-user-select:none}canvas{display:block;width:100vw;height:100vh}#ui{position:fixed;top:0;left:0;right:0;display:flex;justify-content:space-between;align-items:flex-start;padding:14px 18px;pointer-events:none;z-index:10}.stat{display:flex;flex-direction:column;align-items:center}.stat-label{font-size:9px;letter-spacing:3px;color:#ff2d78;text-shadow:0 0 10px #ff2d78;margin-bottom:2px}.stat-value{font-size:22px;font-weight:900;color:#fff;text-shadow:0 0 15px #00f3ff}#lives-display{display:flex;gap:6px;align-items:center;margin-top:4px}.heart{width:20px;height:20px;background:#ff2d78;-webkit-clip-path:path('M10 18S1 12 1 6A4.5 4.5 0 0 1 10 2.8 4.5 4.5 0 0 1 19 6C19 12 10 18 10 18Z');clip-path:path('M10 18S1 12 1 6A4.5 4.5 0 0 1 10 2.8 4.5 4.5 0 0 1 19 6C19 12 10 18 10 18Z');display:inline-block;flex-shrink:0}.heart.lost{background:rgba(255,45,120,0.15);-webkit-clip-path:none;clip-path:none;border:1px solid rgba(255,45,120,0.3);border-radius:2px}#overlay{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:20;background:radial-gradient(ellipse at center,rgba(0,10,30,0.95) 0%,rgba(0,0,0,0.98) 100%);text-align:center}#overlay h1{font-size:38px;font-weight:900;letter-spacing:4px;color:#fff;text-shadow:0 0 20px #00f3ff,0 0 50px #00f3ff;margin-bottom:6px;text-align:center;white-space:nowrap}#overlay .sub{font-size:11px;letter-spacing:4px;color:#ff2d78;text-shadow:0 0 15px #ff2d78;margin-bottom:40px}#overlay .info{font-size:14px;color:#00f3ff;letter-spacing:3px;margin-bottom:8px;text-shadow:0 0 10px #00f3ff;display:none}#overlay .hiscore{font-size:12px;color:#ffdd00;letter-spacing:3px;margin-bottom:28px;text-shadow:0 0 10px #ffdd00;display:none}#start-btn{background:transparent;border:2px solid #00f3ff;color:#00f3ff;font-family:'Courier New',Courier,monospace;font-size:14px;font-weight:700;letter-spacing:4px;padding:14px 36px;cursor:pointer;-webkit-tap-highlight-color:transparent;box-shadow:0 0 20px #00f3ff}#hint{margin-top:14px;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,0.3)}#combo{position:fixed;top:76px;left:50%;transform:translateX(-50%);font-size:12px;letter-spacing:3px;color:#ffdd00;text-shadow:0 0 12px #ffdd00;pointer-events:none;z-index:10;opacity:0;transition:opacity 0.3s}#combo.show{opacity:1}#lvlflash{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:15;opacity:0}#lvlflash span{font-size:44px;font-weight:900;letter-spacing:5px;color:#fff;text-shadow:0 0 30px #ff2d78}#shop{position:fixed;inset:0;display:none;flex-direction:column;align-items:center;justify-content:flex-start;padding:24px 16px;overflow-y:auto;z-index:25;background:radial-gradient(ellipse at center,rgba(0,5,20,0.98) 0%,rgba(0,0,0,1) 100%)}#shop.active{display:flex}#shop-title{font-size:28px;font-weight:900;letter-spacing:4px;color:#ffdd00;text-shadow:0 0 20px #ffdd00;margin-bottom:4px;margin-top:8px;white-space:nowrap;text-align:center;width:100%}#shop-sub{font-size:9px;letter-spacing:3px;color:rgba(255,255,255,0.35);margin-bottom:6px}#shop-pts{font-size:14px;color:#00f3ff;letter-spacing:3px;text-shadow:0 0 10px #00f3ff;margin-bottom:14px}#shop-tabs{display:flex;gap:8px;margin-bottom:14px}.stab{background:transparent;border:1.5px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.4);font-family:'Courier New',Courier,monospace;font-size:10px;letter-spacing:2px;padding:7px 18px;cursor:pointer;-webkit-tap-highlight-color:transparent}.stab.on{border-color:#ffdd00;color:#ffdd00;box-shadow:0 0 8px rgba(255,221,0,0.3)}#shop-list{display:flex;flex-direction:column;gap:9px;width:100%;max-width:360px}.sitem{display:flex;align-items:center;gap:10px;border:1.5px solid rgba(255,255,255,0.1);padding:10px 12px;background:rgba(255,255,255,0.03)}.sitem.ok{border-color:rgba(0,243,255,0.4)}.sitem.okup{border-color:rgba(255,170,0,0.4)}.sicon{font-size:20px;flex-shrink:0}.sinfo{flex:1}.sname{font-size:11px;font-weight:700;letter-spacing:2px;color:#fff;margin-bottom:2px}.sdesc{font-size:8px;letter-spacing:1px;color:rgba(255,255,255,0.38)}.slvl{font-size:8px;letter-spacing:1px;color:#ffaa00;margin-top:2px}.sbtn{background:transparent;font-family:'Courier New',Courier,monospace;font-weight:700;font-size:9px;letter-spacing:2px;padding:7px 10px;cursor:pointer;white-space:nowrap;flex-shrink:0;-webkit-tap-highlight-color:transparent}.sbtn.buy{border:1.5px solid #ffdd00;color:#ffdd00}.sbtn.ubuy{border:1.5px solid #ffaa00;color:#ffaa00}.sbtn.no{border:1.5px solid rgba(255,255,255,0.12);color:rgba(255,255,255,0.18);pointer-events:none}#shop-cont{margin-top:18px;margin-bottom:24px;background:transparent;border:2px solid #00f3ff;color:#00f3ff;font-family:'Courier New',Courier,monospace;font-size:12px;font-weight:700;letter-spacing:4px;padding:12px 32px;cursor:pointer;box-shadow:0 0 16px #00f3ff;-webkit-tap-highlight-color:transparent}</style>
+<style>*{margin:0;padding:0;box-sizing:border-box}body{background:#000;overflow:hidden;touch-action:none;font-family:'Courier New',Courier,monospace;user-select:none;-webkit-user-select:none}canvas{display:block;width:100vw;height:100vh}#ui{position:fixed;top:0;left:0;right:0;display:flex;justify-content:space-between;align-items:flex-start;padding:14px 18px;pointer-events:none;z-index:10}.stat{display:flex;flex-direction:column;align-items:center}.stat-label{font-size:9px;letter-spacing:3px;color:#ff2d78;text-shadow:0 0 10px #ff2d78;margin-bottom:2px}.stat-value{font-size:22px;font-weight:900;color:#fff;text-shadow:0 0 15px #00f3ff}#lives-display{display:flex;gap:6px;align-items:center;margin-top:4px}.heart{width:20px;height:18px;position:relative;display:inline-block;flex-shrink:0}.heart:before,.heart:after{content:'';position:absolute;top:0;width:10px;height:16px;background:#ff2d78;border-radius:10px 10px 0 0;box-shadow:0 0 8px #ff2d78}.heart:before{left:0;-webkit-transform:rotate(-45deg);transform:rotate(-45deg);-webkit-transform-origin:0 100%;transform-origin:0 100%}.heart:after{right:0;-webkit-transform:rotate(45deg);transform:rotate(45deg);-webkit-transform-origin:100% 100%;transform-origin:100% 100%}.heart.lost:before,.heart.lost:after{background:rgba(255,45,120,0.2);box-shadow:none}#overlay{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:20;background:radial-gradient(ellipse at center,rgba(0,10,30,0.95) 0%,rgba(0,0,0,0.98) 100%);text-align:center}#overlay h1{font-size:38px;font-weight:900;letter-spacing:4px;color:#fff;text-shadow:0 0 20px #00f3ff,0 0 50px #00f3ff;margin-bottom:6px;text-align:center;white-space:nowrap}#overlay .sub{font-size:11px;letter-spacing:4px;color:#ff2d78;text-shadow:0 0 15px #ff2d78;margin-bottom:40px}#overlay .info{font-size:14px;color:#00f3ff;letter-spacing:3px;margin-bottom:8px;text-shadow:0 0 10px #00f3ff;display:none}#overlay .hiscore{font-size:12px;color:#ffdd00;letter-spacing:3px;margin-bottom:28px;text-shadow:0 0 10px #ffdd00;display:none}#start-btn{background:transparent;border:2px solid #00f3ff;color:#00f3ff;font-family:'Courier New',Courier,monospace;font-size:14px;font-weight:700;letter-spacing:4px;padding:14px 36px;cursor:pointer;-webkit-tap-highlight-color:transparent;box-shadow:0 0 20px #00f3ff}#hint{margin-top:14px;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,0.3)}#combo{position:fixed;top:76px;left:50%;transform:translateX(-50%);font-size:12px;letter-spacing:3px;color:#ffdd00;text-shadow:0 0 12px #ffdd00;pointer-events:none;z-index:10;opacity:0;transition:opacity 0.3s}#combo.show{opacity:1}#lvlflash{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:15;opacity:0}#lvlflash span{font-size:44px;font-weight:900;letter-spacing:5px;color:#fff;text-shadow:0 0 30px #ff2d78}#shop{position:fixed;inset:0;display:none;flex-direction:column;align-items:center;justify-content:flex-start;padding:24px 16px;overflow-y:auto;z-index:25;background:radial-gradient(ellipse at center,rgba(0,5,20,0.98) 0%,rgba(0,0,0,1) 100%)}#shop.active{display:flex}#shop-title{font-size:28px;font-weight:900;letter-spacing:4px;color:#ffdd00;text-shadow:0 0 20px #ffdd00;margin-bottom:4px;margin-top:8px;white-space:nowrap;text-align:center;width:100%}#shop-sub{font-size:9px;letter-spacing:3px;color:rgba(255,255,255,0.35);margin-bottom:6px}#shop-pts{font-size:14px;color:#00f3ff;letter-spacing:3px;text-shadow:0 0 10px #00f3ff;margin-bottom:14px}#shop-tabs{display:flex;gap:8px;margin-bottom:14px}.stab{background:transparent;border:1.5px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.4);font-family:'Courier New',Courier,monospace;font-size:10px;letter-spacing:2px;padding:7px 18px;cursor:pointer;-webkit-tap-highlight-color:transparent}.stab.on{border-color:#ffdd00;color:#ffdd00;box-shadow:0 0 8px rgba(255,221,0,0.3)}#shop-list{display:flex;flex-direction:column;gap:9px;width:100%;max-width:360px}.sitem{display:flex;align-items:center;gap:10px;border:1.5px solid rgba(255,255,255,0.1);padding:10px 12px;background:rgba(255,255,255,0.03)}.sitem.ok{border-color:rgba(0,243,255,0.4)}.sitem.okup{border-color:rgba(255,170,0,0.4)}.sicon{font-size:20px;flex-shrink:0}.sinfo{flex:1}.sname{font-size:11px;font-weight:700;letter-spacing:2px;color:#fff;margin-bottom:2px}.sdesc{font-size:8px;letter-spacing:1px;color:rgba(255,255,255,0.38)}.slvl{font-size:8px;letter-spacing:1px;color:#ffaa00;margin-top:2px}.sbtn{background:transparent;font-family:'Courier New',Courier,monospace;font-weight:700;font-size:9px;letter-spacing:2px;padding:7px 10px;cursor:pointer;white-space:nowrap;flex-shrink:0;-webkit-tap-highlight-color:transparent}.sbtn.buy{border:1.5px solid #ffdd00;color:#ffdd00}.sbtn.ubuy{border:1.5px solid #ffaa00;color:#ffaa00}.sbtn.no{border:1.5px solid rgba(255,255,255,0.12);color:rgba(255,255,255,0.18);pointer-events:none}#shop-cont{margin-top:18px;margin-bottom:24px;background:transparent;border:2px solid #00f3ff;color:#00f3ff;font-family:'Courier New',Courier,monospace;font-size:12px;font-weight:700;letter-spacing:4px;padding:12px 32px;cursor:pointer;box-shadow:0 0 16px #00f3ff;-webkit-tap-highlight-color:transparent}</style>
 </head>
 <body>
 <canvas id="c"></canvas>
@@ -36,6 +36,7 @@
   <div class="info" id="final-score"></div>
   <div class="hiscore" id="hi-score"></div>
   <button id="start-btn">LAUNCH</button>
+  <button id="continue-btn" style="display:none;margin-top:10px;background:transparent;border:2px solid #ff2d78;color:#ff2d78;font-family:'Courier New',Courier,monospace;font-size:12px;font-weight:700;letter-spacing:3px;padding:12px 28px;cursor:pointer;-webkit-tap-highlight-color:transparent;box-shadow:0 0 16px #ff2d78">CONTINUE WITH UPGRADES</button>
   <div id="hint">DRAG LEFT THUMB TO MOVE</div>
 </div>
 
@@ -49,22 +50,26 @@ var state = 'menu';
 var score = 0, hiScore = 0, lives = 3, level = 1;
 var combo = 0, comboTimer = 0;
 var frameCount = 0;
+var lastShopLevel = 1; // level to resume from on continue
 var asteroidSpawnRate = 90;
 var asteroidSpeedMult = 1;
 var asteroidHpBonus = 0;
-var MAX_ASTEROIDS = 15;
-var MAX_ENEMIES = 8;
+var MAX_ASTEROIDS = 10; // overridden dynamically
+function enemyCap() { return upgradesBought > 0 ? 6 : 3; }
 var upgrades = { maxLives:0, orbLevel:0 };
 var upgradesBought = 0;
 function upgradeCost() {
 return Math.round(10000 * Math.pow(1.35, upgradesBought) / 1000) * 1000;
 }
-function maxLivesCap() { return 3 + upgrades.maxLives; }
+function orbCost() {
+return Math.round(5000 * Math.pow(1.35, upgrades.orbLevel) / 1000) * 1000;
+}
+function maxLivesCap() { return Math.min(3 + upgrades.maxLives, 6); }
 var ORB_CONFIG = [
 null,
 { count:2, radius:62, speed:0.032, respawn:90 },
-{ count:3, radius:70, speed:0.040, respawn:75 },
-{ count:4, radius:78, speed:0.048, respawn:60 }
+{ count:4, radius:70, speed:0.040, respawn:75 },
+{ count:8, radius:78, speed:0.048, respawn:60 }
 ];
 var player = {
 x:0, y:0, r:18, vx:0, vy:0,
@@ -135,6 +140,8 @@ stick.active = false; stick.id = null; stick.dx = 0; stick.dy = 0;
 }, {passive:false});
 document.getElementById('start-btn').addEventListener('click', startGame);
 document.getElementById('start-btn').addEventListener('touchend', function(e){ e.preventDefault(); startGame(); });
+document.getElementById('continue-btn').addEventListener('click', continueGame);
+document.getElementById('continue-btn').addEventListener('touchend', function(e){ e.preventDefault(); continueGame(); });
 document.getElementById('shop-cont').addEventListener('click', closeShop);
 document.getElementById('shop-cont').addEventListener('touchend', function(e){ e.preventDefault(); closeShop(); });
 document.getElementById('tab-items').addEventListener('click', function(){ setTab('items'); });
@@ -246,8 +253,9 @@ bright: 0.3 + Math.random()*0.7
 });
 }
 }
+function asteroidCap() { return 6; }
 function spawnAsteroid() {
-if (asteroids.length >= MAX_ASTEROIDS) return;
+if (asteroids.length >= asteroidCap()) return;
 var p = edgeSpawn(50);
 var angle = Math.atan2(H/2 - p.y, W/2 - p.x) + (Math.random()-0.5)*1.2;
 var giant = Math.random() < 0.2;
@@ -307,7 +315,7 @@ rings.push({ x:x, y:y, r:startR, startR:startR, endR:endR,
 life:1, decay:1/frames, col:col, shrink:shrink });
 }
 function spawnFormation() {
-if (enemies.length >= MAX_ENEMIES) return;
+if (enemies.length >= enemyCap()) return;
 var type = formationType();
 if (type === 'pincer') {
 spawnFormationEdge('pincer', false);
@@ -328,7 +336,7 @@ else { p.x = -80; p.y = Math.random()*H; }
 var inward = Math.atan2(H/2 - p.y, W/2 - p.x);
 var cos = Math.cos(inward), sin = Math.sin(inward);
 for (var i = 0; i < offsets.length; i++) {
-if (enemies.length >= MAX_ENEMIES) break;
+if (enemies.length >= enemyCap()) break;
 var off = offsets[i];
 var rx = off.dx*cos - off.dy*sin;
 var ry = off.dx*sin + off.dy*cos;
@@ -800,7 +808,12 @@ var def = null;
 for (var i = 0; i < ITEM_DEFS.length; i++) {
 if (ITEM_DEFS[i].id === id) { def = ITEM_DEFS[i]; break; }
 }
-if (def) inventory.push({ id:id, label:def.label, col:def.col });
+if (!def) return;
+// Cap each type at 3
+var count = 0;
+for (var j = 0; j < inventory.length; j++) { if (inventory[j].id === id) count++; }
+if (count >= 3) return;
+inventory.push({ id:id, label:def.label, col:def.col });
 }
 function useItem(idx) {
 var item = inventory[idx];
@@ -824,8 +837,9 @@ renderShop();
 }
 function openShop() {
 state = 'shop';
+lastShopLevel = level;
 document.getElementById('shop').className = 'active';
-setTab('items');
+setTab('upgrades');
 }
 function closeShop() {
 document.getElementById('shop').className = '';
@@ -846,13 +860,15 @@ list.appendChild(makeItemRow(ITEM_DEFS[i]));
 } else {
 var nextCost = upgradeCost();
 for (var j = 0; j < UPGRADE_DEFS.length; j++) {
-list.appendChild(makeUpgradeRow(UPGRADE_DEFS[j], nextCost));
+var cost2 = UPGRADE_DEFS[j].id === 'orbLevel' ? orbCost() : nextCost;
+list.appendChild(makeUpgradeRow(UPGRADE_DEFS[j], cost2));
 }
 }
 }
 function makeItemRow(def) {
 var cost = itemCost(def.id);
-var canAfford = score >= cost;
+var atCap = def.id === 'life' ? lives >= maxLivesCap() : itemCount(def.id) >= 3;
+var canAfford = !atCap && score >= cost;
 var row = document.createElement('div');
 row.className = 'sitem' + (canAfford ? ' ok' : '');
 var icon = document.createElement('div');
@@ -866,14 +882,15 @@ nm.className = 'sname';
 nm.textContent = def.name;
 var desc = document.createElement('div');
 desc.className = 'sdesc';
-desc.textContent = def.desc;
+var countStr = def.id === 'life' ? lives + '/' + maxLivesCap() : itemCount(def.id) + '/3';
+desc.textContent = def.desc + '  [' + countStr + ']';
 info.appendChild(nm);
 info.appendChild(desc);
 var btn = document.createElement('button');
-btn.className = 'sbtn ' + (canAfford ? 'buy' : 'no');
-btn.textContent = cost.toLocaleString() + ' pts';
+btn.className = 'sbtn ' + (atCap ? 'no' : canAfford ? 'buy' : 'no');
+btn.textContent = atCap ? 'FULL' : cost.toLocaleString() + ' pts';
 if (canAfford) {
-(function(id){ 
+(function(id){
 btn.addEventListener('click', function(){ buyItem(id); });
 btn.addEventListener('touchend', function(e){ e.preventDefault(); buyItem(id); });
 })(def.id);
@@ -923,17 +940,27 @@ row.appendChild(info);
 row.appendChild(btn);
 return row;
 }
+function itemCount(id) {
+var n = 0;
+for (var i = 0; i < inventory.length; i++) { if (inventory[i].id === id) n++; }
+return n;
+}
 function buyItem(id) {
 var cost = itemCost(id);
 if (score < cost) return;
+if (id === 'life') {
+if (lives >= maxLivesCap()) return;
+score -= cost; lives++;
+} else {
+if (itemCount(id) >= 3) return;
 score -= cost;
-if (id === 'life') lives = Math.min(lives+1, maxLivesCap());
-else addToInventory(id);
+addToInventory(id);
+}
 updateHUD();
 renderShop();
 }
 function buyUpgrade(id) {
-var cost = upgradeCost();
+var cost = id === 'orbLevel' ? orbCost() : upgradeCost();
 var def = null;
 for (var k = 0; k < UPGRADE_DEFS.length; k++) { if (UPGRADE_DEFS[k].id === id) { def = UPGRADE_DEFS[k]; break; } }
 if (!def || score < cost || upgrades[id] >= def.max) return;
@@ -959,7 +986,7 @@ respawnTimer: existing ? existing.respawnTimer : 0
 player.orbs = newOrbs;
 }
 function startGame() {
-score = 0; lives = 3; level = 1; combo = 0; comboTimer = 0; frameCount = 0;
+score = 0; lives = 3; level = 1; combo = 0; comboTimer = 0; frameCount = 0; lastShopLevel = 1;
 asteroidSpawnRate = 90; asteroidSpeedMult = 1; asteroidHpBonus = 0;
 upgradesBought = 0;
 upgrades.maxLives = 0; upgrades.orbLevel = 0;
@@ -971,6 +998,29 @@ player.trail = []; player.invincible = 120; player.shootCd = 0; player.sideCd = 
 player.angle = -Math.PI/2; player.orbAngle = 0; player.orbs = [];
 state = 'playing';
 document.getElementById('overlay').style.display = 'none';
+initStars();
+updateHUD();
+document.getElementById('continue-btn').style.display = 'none';
+}
+function continueGame() {
+// Resume from last shop level, keep upgrades, refill lives, give one nuke
+level = lastShopLevel; score = 0; lives = maxLivesCap(); combo = 0; comboTimer = 0; frameCount = 0;
+var capLvl = Math.min(level, 6);
+asteroidSpawnRate = Math.max(37, 90 - (capLvl-1)*8);
+asteroidSpeedMult = Math.min(1.9, 1 + (capLvl-1)*0.18);
+asteroidHpBonus = Math.min(3, Math.max(0, Math.floor((level-5)/2)));
+rapidFire = false; rapidTimer = 0; tripleShot = false; tripleShotTimer = 0;
+bullets = []; asteroids = []; particles = []; powerups = []; enemies = []; rings = [];
+boss = null; bossActive = false; bossShake = 0; bossAnnounceTimer = 0;
+player.x = W/2; player.y = H/2; player.vx = 0; player.vy = 0;
+player.trail = []; player.invincible = 180; player.shootCd = 0; player.sideCd = 0;
+player.angle = -Math.PI/2; player.orbAngle = 0;
+rebuildOrbs();
+inventory = [];
+addToInventory('nuke');
+state = 'playing';
+document.getElementById('overlay').style.display = 'none';
+document.getElementById('continue-btn').style.display = 'none';
 initStars();
 updateHUD();
 }
@@ -1014,6 +1064,7 @@ fs.textContent = 'SCORE: ' + score.toLocaleString();
 var hs = document.getElementById('hi-score');
 hs.style.display = 'block';
 hs.textContent = 'BEST: ' + hiScore.toLocaleString();
+document.getElementById('continue-btn').style.display = upgradesBought > 0 ? 'block' : 'none';
 }
 function updateHUD() {
 document.getElementById('s-score').textContent = score.toLocaleString();
